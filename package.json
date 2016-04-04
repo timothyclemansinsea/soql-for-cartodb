@@ -21,7 +21,7 @@
     "any-db-postgres": "^2.1.4",
     "dotenv": "^1.2.0",
     "mocha": "^2.2.5",
-    "node-tims-custom-soql-parser": "https://github.com/timothyclemansinsea/node-tims-custom-soql-parser.git",
+    "node-tims-custom-soql-parser": "https://github.com/timothyclemansinsea/node-tims-custom-soql-parser.git#4fb79bd",
     "restify": "^3.0.3",
     "should": "^7.0.2",
     "sift": "^2.0.4",
