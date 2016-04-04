@@ -21,10 +21,11 @@
     "any-db-postgres": "^2.1.4",
     "dotenv": "^1.2.0",
     "mocha": "^2.2.5",
-    
+    "node-tims-custom-soql-parser": "timothyclemansinsea/node-tims-custom-soql-parser",
     "restify": "^3.0.3",
     "should": "^7.0.2",
     "sift": "^2.0.4",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "request": "^2.67.0"
   }
 }
