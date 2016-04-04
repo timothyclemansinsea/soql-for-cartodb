@@ -1,4 +1,5 @@
 var request = require('request');
+var rollbar = require('rollbar');
 var parser = require('node-soda2-parser'),
 	restify = require('restify'),
 	_ = require('underscore'),
@@ -7,7 +8,7 @@ var parser = require('node-soda2-parser'),
 	processSelect = require('./lib/select');
 require('dotenv').load({silent: true});
 
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8090,
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 5000,
 	server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1', 
 	tables = {},
 	server = restify.createServer();
