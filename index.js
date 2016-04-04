@@ -1,5 +1,4 @@
 var request = require('request');
-var rollbar = require('rollbar');
 var parser = require('node-soda2-parser'),
 	restify = require('restify'),
 	_ = require('underscore'),
