@@ -18,23 +18,23 @@ server.get('/:user/:table', function(req, res, next) {
 	if (!req.query) {
         req.query = '';
     }
-	if (req.params.table == 'tables') {
-        var sql = "SELECT CDB_UserTables('all') as table";
-    } else {
-	    // Parse query into AST
-        var ast = parser.parse(req.query);
 
-        // Process SELECT columns
-        //ast.columns = processSelect(ast.columns, tables[req.params.table]);
+    // Parse query into AST
+    var ast = parser.parse(req.query);
 
-        // Add FROM table to AST
-        ast.from = [{table: '"' + req.params.table + '"'}];
+    // Process SELECT columns
+    //ast.columns = processSelect(ast.columns, tables[req.params.table]);
 
-        // Process WHERE recursively
-        if(ast.where) ast.where = processWhere(ast.where);
+    // Add FROM table to AST
+    ast.from = [{table: '"' + req.params.table + '"'}];
 
-        // Convert AST back to SQL
-        var sql = parser.stringify.parse(ast);
+    // Process WHERE recursively
+    if(ast.where) ast.where = processWhere(ast.where);
+
+    // Convert AST back to SQL
+    var sql = parser.stringify.parse(ast);
+    if (req.params.table == 'tables') {
+        sql = sql.replace('FROM "tables"', "FROM (SELECT CDB_UserTables('all')) tables";
     }
     var url = 'https://'+req.params.user+'.cartodb.com/api/v2/sql?q='+encodeURIComponent(sql);
     console.log(url);
