@@ -8,7 +8,7 @@ var parser = require('node-soda2-parser'),
 	processSelect = require('./lib/select');
 require('dotenv').load({silent: true});
 
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 5000,
+var server_port = process.env.PORT || 8080;,
 	server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1', 
 	tables = {},
 	server = restify.createServer();
