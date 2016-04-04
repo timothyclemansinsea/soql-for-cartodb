@@ -17,6 +17,7 @@
   "author": "timwis",
   "license": "Apache-2.0",
   "dependencies": {
+    "start":"node index.js",  
     "any-db": "^2.1.0",
     "any-db-postgres": "^2.1.4",
     "dotenv": "^1.2.0",
