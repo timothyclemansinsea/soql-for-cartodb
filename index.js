@@ -1,3 +1,4 @@
+var request = require('request');
 var parser = require('node-soda2-parser'),
 	restify = require('restify'),
 	_ = require('underscore'),
@@ -6,24 +7,23 @@ var parser = require('node-soda2-parser'),
 	processSelect = require('./lib/select');
 require('dotenv').load({silent: true});
 
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080,
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8090,
 	server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1', 
-	conn = anyDB.createConnection(process.env.DATABASE_URL),
 	tables = {},
 	server = restify.createServer();
 server.use(restify.queryParser());
 
-server.get('/resource/:table', function(req, res, next) {
+server.get('/:user/:table', function(req, res, next) {
 	// If table doesn't exist, send error
-	if(tables[req.params.table] === undefined) {
-		return res.send(404);
-	}
+	if (!req.query) {
+        req.query = '';
+    }
 	
 	// Parse query into AST
 	var ast = parser.parse(req.query);
 	
 	// Process SELECT columns
-	ast.columns = processSelect(ast.columns, tables[req.params.table]);
+	//ast.columns = processSelect(ast.columns, tables[req.params.table]);
 	
 	// Add FROM table to AST
 	ast.from = [{table: '"' + req.params.table + '"'}];
@@ -34,23 +34,27 @@ server.get('/resource/:table', function(req, res, next) {
 	// Convert AST back to SQL
 	var sql = parser.stringify.parse(ast);
 	
-	// Query database with SQL
-	conn.query(sql, function(err, result) {
-		if(err) console.error(err);
-		res.json(result.rows);
-		next();
-	});
+    var url = 'https://'+req.params.user+'.cartodb.com/api/v2/sql?q='+encodeURIComponent(sql);
+    console.log(url);
+    console.log(sql);
+    request(url, function (error, response, body) {
+      console.log(body);
+      if (!error && response.statusCode == 200) {
+        var data = JSON.parse(body);
+        data['sql'] = sql;
+        res.json(data);
+        next();
+      } else {
+        res.json(JSON.parse(body));
+        next();  
+      }
+    })
+	
+	
 });
 
-/**
- * Get tables & fields, then start the server
- */
-var sql = 'select column_name AS name, udt_name AS type, table_name from INFORMATION_SCHEMA.COLUMNS where table_schema = \'public\';';
-conn.query(sql, function(err, result) {
-	if(err) return console.error(err);
-	tables = _.groupBy(result.rows, 'table_name');
+
 	
-	server.listen(server_port, server_ip_address, function() {
-		console.log('%s listening at %s', server.name, server.url);
-	});
+server.listen(server_port, server_ip_address, function() {
+    console.log('%s listening at %s', server.name, server.url);
 });
