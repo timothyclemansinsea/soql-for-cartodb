@@ -6,6 +6,12 @@ Uses [node-soda2-parser](https://github.com/timwis/node-soda2-parser) to provide
 2. Install dependencies via `npm install`
 3. Create a copy of `.env.sample` named `.env` and fill in the values, pointing it to a postgres database with postgis enabled
 
+```
+git clone https://github.com/timothyclemansinsea/soql-for-cartodb.git
+cd soql-for-cartodb/
+npm install
+```
+
 # Usage
 To run a SODA2 API server, use `node index.js` Then query the API using SODA2 calls, ie. `http://localhost:8080/resource/table_name?$select=*&zip_code=19141`
 
