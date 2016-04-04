@@ -34,7 +34,7 @@ server.get('/:user/:table', function(req, res, next) {
     // Convert AST back to SQL
     var sql = parser.stringify.parse(ast);
     if (req.params.table == 'tables') {
-        sql = sql.replace('FROM "tables"', "FROM (SELECT CDB_UserTables('all')) tables";
+        sql = sql.replace('FROM "tables"', "FROM (SELECT CDB_UserTables('all')) tables");
     }
     var url = 'https://'+req.params.user+'.cartodb.com/api/v2/sql?q='+encodeURIComponent(sql);
     console.log(url);
