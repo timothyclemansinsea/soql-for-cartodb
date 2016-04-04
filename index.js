@@ -54,7 +54,8 @@ server.get('/:user/:table', function(req, res, next) {
 });
 
 
-	
-server.listen(server_port, server_ip_address, function() {
+var server_port = process.env.YOUR_PORT || process.env.PORT || 80;
+var server_host = process.env.YOUR_HOST || '0.0.0.0';	
+server.listen(server_port, server_host, function() {
     console.log('%s listening at %s', server.name, server.url);
 });
